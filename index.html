@@ -1,0 +1,1368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ajay K — MT5 Admin & Developer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=DM+Mono:wght@300;400;500&family=Barlow:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg-primary: #080a0f;
+    --bg-secondary: #0d1018;
+    --bg-card: #111520;
+    --bg-card2: #141824;
+    --gold: #c8a45a;
+    --gold-light: #e2c47e;
+    --gold-dim: rgba(200,164,90,0.15);
+    --cyan: #26d0ce;
+    --cyan-dim: rgba(38,208,206,0.12);
+    --text-primary: #e8e2d4;
+    --text-secondary: #8a8578;
+    --text-muted: #4a4840;
+    --border: rgba(200,164,90,0.18);
+    --border-subtle: rgba(255,255,255,0.05);
+    --gradient-gold: linear-gradient(135deg, #c8a45a, #e2c47e, #a87c3a);
+    --gradient-hero: linear-gradient(160deg, #080a0f 0%, #0d1220 50%, #080a0f 100%);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    font-family: 'Barlow', sans-serif;
+    font-weight: 300;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* ── Custom Cursor ─────────────────────────────────── */
+  .cursor-dot {
+    width: 6px; height: 6px;
+    background: var(--gold);
+    border-radius: 50%;
+    position: fixed; top: 0; left: 0;
+    pointer-events: none; z-index: 9999;
+    transform: translate(-50%,-50%);
+    transition: transform 0.08s;
+  }
+  .cursor-ring {
+    width: 32px; height: 32px;
+    border: 1px solid var(--gold);
+    border-radius: 50%;
+    position: fixed; top: 0; left: 0;
+    pointer-events: none; z-index: 9998;
+    transform: translate(-50%,-50%);
+    transition: transform 0.2s ease, width 0.2s, height 0.2s, opacity 0.2s;
+    opacity: 0.6;
+  }
+  .cursor-ring.hover { width: 50px; height: 50px; opacity: 0.3; }
+
+  /* ── Canvas BG ─────────────────────────────────────── */
+  #bg-canvas {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    z-index: 0; pointer-events: none; opacity: 0.5;
+  }
+
+  /* ── Nav ───────────────────────────────────────────── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 24px 60px;
+    background: linear-gradient(to bottom, rgba(8,10,15,0.95), transparent);
+    backdrop-filter: blur(8px);
+    transition: padding 0.3s;
+  }
+  nav.scrolled { padding: 16px 60px; background: rgba(8,10,15,0.97); border-bottom: 1px solid var(--border); }
+
+  .nav-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    color: var(--gold);
+    text-decoration: none;
+  }
+  .nav-logo span { color: var(--text-secondary); font-weight: 300; }
+
+  .nav-links { display: flex; gap: 40px; list-style: none; }
+  .nav-links a {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: color 0.2s;
+    position: relative;
+  }
+  .nav-links a::after {
+    content: '';
+    position: absolute; bottom: -4px; left: 0; width: 0; height: 1px;
+    background: var(--gold);
+    transition: width 0.3s;
+  }
+  .nav-links a:hover { color: var(--gold-light); }
+  .nav-links a:hover::after { width: 100%; }
+
+  .nav-cta {
+    padding: 9px 24px;
+    border: 1px solid var(--gold);
+    color: var(--gold) !important;
+    font-family: 'DM Mono', monospace !important;
+    font-size: 10px !important;
+    letter-spacing: 0.2em !important;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: background 0.2s, color 0.2s !important;
+  }
+  .nav-cta:hover { background: var(--gold) !important; color: var(--bg-primary) !important; }
+  .nav-cta::after { display: none !important; }
+
+  /* ── Hero ──────────────────────────────────────────── */
+  #hero {
+    position: relative; z-index: 1;
+    min-height: 100vh;
+    display: flex; flex-direction: column; justify-content: center;
+    padding: 0 60px;
+    overflow: hidden;
+  }
+
+  .hero-eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--cyan);
+    margin-bottom: 28px;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.3s forwards;
+    display: flex; align-items: center; gap: 16px;
+  }
+  .hero-eyebrow::before {
+    content: '';
+    display: inline-block; width: 40px; height: 1px;
+    background: var(--cyan);
+  }
+
+  .hero-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(72px, 9vw, 140px);
+    font-weight: 700;
+    line-height: 0.88;
+    letter-spacing: -0.02em;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.5s forwards;
+    margin-bottom: 12px;
+  }
+  .hero-name .first { color: var(--text-primary); display: block; }
+  .hero-name .last {
+    display: block;
+    background: var(--gradient-gold);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-title {
+    font-family: 'DM Mono', monospace;
+    font-size: clamp(13px, 1.5vw, 17px);
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    margin-top: 24px;
+    margin-bottom: 50px;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.7s forwards;
+  }
+
+  .hero-desc {
+    max-width: 560px;
+    font-size: 17px;
+    line-height: 1.75;
+    color: var(--text-secondary);
+    opacity: 0;
+    animation: fadeUp 0.8s 0.9s forwards;
+    margin-bottom: 52px;
+    font-weight: 300;
+  }
+
+  .hero-actions {
+    display: flex; gap: 20px; align-items: center;
+    opacity: 0;
+    animation: fadeUp 0.8s 1.1s forwards;
+  }
+
+  .btn-primary {
+    padding: 16px 42px;
+    background: var(--gold);
+    color: var(--bg-primary);
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.25s;
+    clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 12px 100%, 0 calc(100% - 12px));
+  }
+  .btn-primary:hover { background: var(--gold-light); transform: translateY(-2px); box-shadow: 0 12px 40px rgba(200,164,90,0.35); }
+
+  .btn-secondary {
+    padding: 16px 42px;
+    border: 1px solid var(--border);
+    color: var(--text-secondary);
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: all 0.25s;
+  }
+  .btn-secondary:hover { border-color: var(--gold); color: var(--gold); }
+
+  .hero-meta {
+    position: absolute; bottom: 50px; right: 60px;
+    display: flex; flex-direction: column; align-items: flex-end; gap: 8px;
+    opacity: 0;
+    animation: fadeUp 0.8s 1.3s forwards;
+  }
+  .hero-meta-item {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+  .hero-meta-item strong { color: var(--gold); margin-right: 8px; }
+
+  .scroll-indicator {
+    position: absolute; bottom: 50px; left: 60px;
+    display: flex; align-items: center; gap: 14px;
+    opacity: 0;
+    animation: fadeUp 0.8s 1.5s forwards;
+  }
+  .scroll-line {
+    width: 1px; height: 60px;
+    background: linear-gradient(to bottom, var(--gold), transparent);
+    animation: scrollPulse 2s ease-in-out infinite;
+  }
+  .scroll-text {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    writing-mode: vertical-rl;
+  }
+
+  /* ── Ticker ────────────────────────────────────────── */
+  .ticker-strip {
+    position: relative; z-index: 1;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    background: var(--bg-secondary);
+    padding: 12px 0;
+    overflow: hidden;
+  }
+  .ticker-track {
+    display: flex; gap: 0;
+    animation: ticker 30s linear infinite;
+    white-space: nowrap;
+  }
+  .ticker-item {
+    display: inline-flex; align-items: center; gap: 12px;
+    padding: 0 40px;
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+    border-right: 1px solid var(--border-subtle);
+  }
+  .ticker-item .sym { color: var(--gold); font-weight: 500; }
+  .ticker-item .up { color: var(--cyan); }
+  .ticker-item .down { color: #e05555; }
+
+  /* ── Section Layout ────────────────────────────────── */
+  section { position: relative; z-index: 1; }
+
+  .section-inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 120px 60px;
+  }
+
+  .section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 16px;
+    display: flex; align-items: center; gap: 14px;
+  }
+  .section-label::after {
+    content: '';
+    flex: 1; height: 1px;
+    background: var(--border);
+    max-width: 60px;
+  }
+
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(38px, 4.5vw, 64px);
+    font-weight: 700;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    margin-bottom: 60px;
+  }
+  .section-title em { font-style: italic; color: var(--gold); }
+
+  /* ── About ─────────────────────────────────────────── */
+  #about { background: var(--bg-secondary); }
+
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.4fr;
+    gap: 100px;
+    align-items: start;
+  }
+
+  .about-photo-wrap {
+    position: relative;
+  }
+  .about-photo-frame {
+    position: relative;
+    width: 100%;
+    padding-bottom: 120%;
+    overflow: hidden;
+  }
+  .about-photo-frame::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: var(--gradient-gold);
+    opacity: 0.08;
+    z-index: 1;
+  }
+  .about-photo-frame::after {
+    content: '';
+    position: absolute;
+    top: 16px; left: 16px; right: -16px; bottom: -16px;
+    border: 1px solid var(--border);
+    z-index: 0;
+    pointer-events: none;
+  }
+  .about-photo-inner {
+    position: absolute; inset: 0;
+    background: var(--bg-card);
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
+  }
+  .profile-avatar {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    filter: grayscale(20%) contrast(1.05);
+  }
+  .avatar-placeholder {
+    width: 100%; height: 100%;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    background: linear-gradient(135deg, #111520, #1a1f30);
+  }
+  .avatar-initials {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 96px;
+    font-weight: 700;
+    background: var(--gradient-gold);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1;
+  }
+  .avatar-sub {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-top: 12px;
+  }
+
+  .about-badges {
+    display: flex; flex-wrap: wrap; gap: 8px;
+    margin-top: 24px;
+  }
+  .badge {
+    padding: 6px 14px;
+    border: 1px solid var(--border);
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    transition: all 0.2s;
+  }
+  .badge:hover { border-color: var(--gold); color: var(--gold); }
+  .badge.gold { border-color: var(--gold); color: var(--gold); background: var(--gold-dim); }
+
+  .about-content p {
+    font-size: 17px;
+    line-height: 1.85;
+    color: var(--text-secondary);
+    margin-bottom: 24px;
+    font-weight: 300;
+  }
+  .about-content p strong { color: var(--text-primary); font-weight: 500; }
+
+  .about-stats {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    margin-top: 48px;
+  }
+  .stat-cell {
+    background: var(--bg-card);
+    padding: 28px 24px;
+    text-align: center;
+  }
+  .stat-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 42px;
+    font-weight: 700;
+    color: var(--gold);
+    line-height: 1;
+    display: block;
+  }
+  .stat-lbl {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    display: block;
+    margin-top: 8px;
+  }
+
+  /* ── Experience ────────────────────────────────────── */
+  #experience { background: var(--bg-primary); }
+
+  .exp-timeline {
+    position: relative;
+    padding-left: 40px;
+  }
+  .exp-timeline::before {
+    content: '';
+    position: absolute; top: 0; left: 0; bottom: 0;
+    width: 1px;
+    background: linear-gradient(to bottom, var(--gold), var(--border), transparent);
+  }
+
+  .exp-item {
+    position: relative;
+    margin-bottom: 70px;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.6s ease;
+  }
+  .exp-item.visible { opacity: 1; transform: translateY(0); }
+
+  .exp-dot {
+    position: absolute; left: -46px; top: 8px;
+    width: 12px; height: 12px;
+    border: 2px solid var(--gold);
+    background: var(--bg-primary);
+    transform: rotate(45deg);
+    transition: background 0.2s;
+  }
+  .exp-item:hover .exp-dot { background: var(--gold); }
+
+  .exp-header {
+    display: flex; align-items: flex-start; justify-content: space-between;
+    margin-bottom: 8px;
+    flex-wrap: wrap; gap: 12px;
+  }
+  .exp-role {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--text-primary);
+    letter-spacing: -0.01em;
+  }
+  .exp-company {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 4px;
+  }
+  .exp-period {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+    padding: 4px 12px;
+    border: 1px solid var(--border);
+    white-space: nowrap;
+  }
+  .exp-period.current { border-color: var(--cyan); color: var(--cyan); }
+
+  .exp-bullets {
+    list-style: none;
+    margin-top: 20px;
+    display: flex; flex-direction: column; gap: 10px;
+  }
+  .exp-bullets li {
+    display: flex; align-items: flex-start; gap: 14px;
+    font-size: 15px;
+    line-height: 1.65;
+    color: var(--text-secondary);
+    font-weight: 300;
+  }
+  .exp-bullets li::before {
+    content: '//';
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--gold);
+    opacity: 0.7;
+    margin-top: 2px;
+    flex-shrink: 0;
+  }
+
+  /* ── Skills ────────────────────────────────────────── */
+  #skills { background: var(--bg-secondary); }
+
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+
+  .skill-category {
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    padding: 36px 32px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.3s, transform 0.3s;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.5s ease;
+  }
+  .skill-category.visible { opacity: 1; transform: translateY(0); }
+  .skill-category::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0;
+    height: 2px;
+    background: var(--gradient-gold);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.4s;
+  }
+  .skill-category:hover::before { transform: scaleX(1); }
+  .skill-category:hover { border-color: var(--border); }
+
+  .skill-cat-icon {
+    font-size: 28px; margin-bottom: 16px; display: block;
+  }
+  .skill-cat-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 20px;
+    letter-spacing: 0.02em;
+  }
+
+  .skill-bar-item { margin-bottom: 14px; }
+  .skill-bar-header {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 6px;
+  }
+  .skill-bar-name {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+  }
+  .skill-bar-pct {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--gold);
+  }
+  .skill-bar-track {
+    height: 2px;
+    background: var(--border-subtle);
+    border-radius: 0;
+    overflow: hidden;
+  }
+  .skill-bar-fill {
+    height: 100%;
+    background: linear-gradient(to right, var(--gold), var(--gold-light));
+    width: 0%;
+    transition: width 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .skill-tags {
+    display: flex; flex-wrap: wrap; gap: 6px;
+    margin-top: 16px;
+  }
+  .skill-tag {
+    padding: 4px 10px;
+    background: var(--gold-dim);
+    border: 1px solid var(--border);
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+
+  /* ── Contact ───────────────────────────────────────── */
+  #contact { background: var(--bg-primary); }
+
+  .contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: start;
+  }
+
+  .contact-intro p {
+    font-size: 17px;
+    line-height: 1.85;
+    color: var(--text-secondary);
+    font-weight: 300;
+    margin-bottom: 40px;
+  }
+
+  .contact-links { display: flex; flex-direction: column; gap: 16px; }
+  .contact-link {
+    display: flex; align-items: center; gap: 20px;
+    padding: 20px 24px;
+    border: 1px solid var(--border-subtle);
+    text-decoration: none;
+    transition: all 0.25s;
+    background: var(--bg-card);
+  }
+  .contact-link:hover { border-color: var(--gold); transform: translateX(8px); }
+  .contact-link-icon {
+    width: 42px; height: 42px;
+    border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 17px;
+    flex-shrink: 0;
+    transition: border-color 0.25s, background 0.25s;
+  }
+  .contact-link:hover .contact-link-icon { border-color: var(--gold); background: var(--gold-dim); }
+  .contact-link-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    display: block;
+    margin-bottom: 4px;
+  }
+  .contact-link-value {
+    font-size: 15px;
+    color: var(--text-primary);
+    font-weight: 400;
+  }
+
+  .contact-form { display: flex; flex-direction: column; gap: 20px; }
+
+  .form-group { display: flex; flex-direction: column; gap: 8px; }
+  .form-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+  .form-input, .form-textarea {
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-primary);
+    padding: 14px 18px;
+    font-family: 'Barlow', sans-serif;
+    font-size: 15px;
+    font-weight: 300;
+    outline: none;
+    transition: border-color 0.2s;
+    width: 100%;
+    resize: none;
+  }
+  .form-input:focus, .form-textarea:focus { border-color: var(--gold); }
+  .form-input::placeholder, .form-textarea::placeholder { color: var(--text-muted); }
+  .form-textarea { min-height: 130px; }
+
+  .form-submit {
+    padding: 16px 42px;
+    background: var(--gold);
+    color: var(--bg-primary);
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    border: none;
+    cursor: none;
+    font-weight: 500;
+    transition: all 0.25s;
+    align-self: flex-start;
+    clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
+  }
+  .form-submit:hover { background: var(--gold-light); transform: translateY(-2px); box-shadow: 0 12px 40px rgba(200,164,90,0.3); }
+
+  /* ── Footer ────────────────────────────────────────── */
+  footer {
+    position: relative; z-index: 1;
+    border-top: 1px solid var(--border);
+    background: var(--bg-secondary);
+    padding: 40px 60px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .footer-left {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--gold);
+  }
+  .footer-center {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    text-align: center;
+  }
+  .footer-right {
+    display: flex; gap: 24px;
+  }
+  .footer-social {
+    width: 38px; height: 38px;
+    border: 1px solid var(--border-subtle);
+    display: flex; align-items: center; justify-content: center;
+    text-decoration: none;
+    font-size: 15px;
+    color: var(--text-muted);
+    transition: all 0.2s;
+  }
+  .footer-social:hover { border-color: var(--gold); color: var(--gold); }
+
+  /* ── Animations ────────────────────────────────────── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes ticker {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
+  @keyframes scrollPulse {
+    0%, 100% { opacity: 0.4; }
+    50%       { opacity: 1; }
+  }
+  @keyframes shimmer {
+    0%   { background-position: -200% center; }
+    100% { background-position: 200% center; }
+  }
+
+  /* ── Responsive ────────────────────────────────────── */
+  @media (max-width: 1024px) {
+    nav { padding: 20px 32px; }
+    nav.scrolled { padding: 14px 32px; }
+    .section-inner { padding: 90px 32px; }
+    #hero { padding: 0 32px; }
+    .about-grid { grid-template-columns: 1fr; gap: 60px; }
+    .about-photo-frame { padding-bottom: 70%; }
+    .skills-grid { grid-template-columns: repeat(2, 1fr); }
+    .contact-grid { grid-template-columns: 1fr; gap: 50px; }
+    footer { flex-direction: column; gap: 24px; text-align: center; padding: 32px; }
+    .hero-meta { right: 32px; }
+    .scroll-indicator { left: 32px; }
+  }
+  @media (max-width: 640px) {
+    nav { padding: 16px 20px; }
+    .nav-links { display: none; }
+    .section-inner { padding: 70px 20px; }
+    #hero { padding: 0 20px; }
+    .skills-grid { grid-template-columns: 1fr; }
+    .about-stats { grid-template-columns: 1fr; }
+    .hero-meta { display: none; }
+    footer { padding: 24px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="cursor-dot" id="cursorDot"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+<canvas id="bg-canvas"></canvas>
+
+<!-- ══ NAV ══════════════════════════════════════════════ -->
+<nav id="mainNav">
+  <a href="#" class="nav-logo">AK <span>/ Portfolio</span></a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#contact">Contact</a></li>
+    <li><a href="mailto:ajay171098@gmail.com" class="nav-cta">Hire Me</a></li>
+  </ul>
+</nav>
+
+<!-- ══ HERO ═════════════════════════════════════════════ -->
+<section id="hero">
+  <div class="hero-eyebrow">MT5 Administrator &amp; Developer</div>
+  <h1 class="hero-name">
+    <span class="first">Ajay</span>
+    <span class="last">K</span>
+  </h1>
+  <div class="hero-title">Trading Technology Specialist · Dubai, UAE</div>
+  <p class="hero-desc">
+    Building next-generation trading infrastructure — from MT5 administration and
+    liquidity bridge architecture to FIX API integration and HFT operations.
+    Precision-engineered systems at the intersection of finance and technology.
+  </p>
+  <div class="hero-actions">
+    <a href="#experience" class="btn-primary">View Experience</a>
+    <a href="#contact" class="btn-secondary">Let's Connect</a>
+  </div>
+
+  <div class="scroll-indicator">
+    <div class="scroll-line"></div>
+    <div class="scroll-text">Scroll</div>
+  </div>
+
+  <div class="hero-meta">
+    <div class="hero-meta-item"><strong>📍</strong>Dubai, UAE</div>
+    <div class="hero-meta-item"><strong>🎓</strong>BE — Computer Science</div>
+    <div class="hero-meta-item"><strong>⚡</strong>Available for opportunities</div>
+  </div>
+</section>
+
+<!-- ══ TICKER ════════════════════════════════════════════ -->
+<div class="ticker-strip" aria-hidden="true">
+  <div class="ticker-track" id="tickerTrack">
+    <div class="ticker-item"><span class="sym">EURUSD</span> <span class="up">1.08432 ▲</span></div>
+    <div class="ticker-item"><span class="sym">XAUUSD</span> <span class="up">2341.50 ▲</span></div>
+    <div class="ticker-item"><span class="sym">MT5 Admin</span> <span class="up">Active</span></div>
+    <div class="ticker-item"><span class="sym">GBPUSD</span> <span class="down">1.26741 ▼</span></div>
+    <div class="ticker-item"><span class="sym">BridgeX</span> <span class="up">Connected</span></div>
+    <div class="ticker-item"><span class="sym">USDJPY</span> <span class="up">149.823 ▲</span></div>
+    <div class="ticker-item"><span class="sym">FIX Protocol</span> <span class="up">Integrated</span></div>
+    <div class="ticker-item"><span class="sym">BTCUSD</span> <span class="up">67240 ▲</span></div>
+    <div class="ticker-item"><span class="sym">LP Connectivity</span> <span class="up">Stable</span></div>
+    <div class="ticker-item"><span class="sym">USOIL</span> <span class="down">78.42 ▼</span></div>
+    <div class="ticker-item"><span class="sym">EURUSD</span> <span class="up">1.08432 ▲</span></div>
+    <div class="ticker-item"><span class="sym">XAUUSD</span> <span class="up">2341.50 ▲</span></div>
+    <div class="ticker-item"><span class="sym">MT5 Admin</span> <span class="up">Active</span></div>
+    <div class="ticker-item"><span class="sym">GBPUSD</span> <span class="down">1.26741 ▼</span></div>
+    <div class="ticker-item"><span class="sym">BridgeX</span> <span class="up">Connected</span></div>
+    <div class="ticker-item"><span class="sym">USDJPY</span> <span class="up">149.823 ▲</span></div>
+    <div class="ticker-item"><span class="sym">FIX Protocol</span> <span class="up">Integrated</span></div>
+    <div class="ticker-item"><span class="sym">BTCUSD</span> <span class="up">67240 ▲</span></div>
+    <div class="ticker-item"><span class="sym">LP Connectivity</span> <span class="up">Stable</span></div>
+    <div class="ticker-item"><span class="sym">USOIL</span> <span class="down">78.42 ▼</span></div>
+  </div>
+</div>
+
+<!-- ══ ABOUT ═════════════════════════════════════════════ -->
+<section id="about">
+  <div class="section-inner">
+    <div class="about-grid">
+      <div class="about-photo-wrap">
+        <div class="about-photo-frame">
+          <div class="about-photo-inner">
+            <div class="avatar-placeholder">
+              <div class="avatar-initials">AK</div>
+              <div class="avatar-sub">MT5 Specialist</div>
+            </div>
+          </div>
+        </div>
+        <div class="about-badges">
+          <span class="badge gold">Dubai, UAE</span>
+          <span class="badge">Visit Visa</span>
+          <span class="badge">Open to Work</span>
+          <span class="badge">Tamil · English · Hindi</span>
+        </div>
+      </div>
+
+      <div class="about-content">
+        <div class="section-label">About Me</div>
+        <h2 class="section-title">Trading Tech <em>Specialist</em></h2>
+        <p>
+          I'm <strong>Ajay K</strong>, an MT5 Administrator and Trading Technology Specialist based in Dubai.
+          With hands-on experience in liquidity bridge monitoring, FIX API integration, and backend trading
+          infrastructure, I bridge the gap between complex financial systems and operational excellence.
+        </p>
+        <p>
+          My current role at TradeTech involves administering MT5 environments end-to-end — from symbol configuration
+          and spread management to LP connectivity with <strong>Finalto</strong> and <strong>Mass Markets</strong>.
+          I also develop automation tools that streamline trading operations and support HFT execution pipelines.
+        </p>
+        <p>
+          A BE graduate in Computer Science, I bring both technical depth and domain expertise in
+          broker-side operations, risk monitoring, and execution infrastructure.
+        </p>
+
+        <div class="about-stats">
+          <div class="stat-cell">
+            <span class="stat-num" data-count="5">0</span>
+            <span class="stat-lbl">Years in Tech</span>
+          </div>
+          <div class="stat-cell">
+            <span class="stat-num" data-count="3">0</span>
+            <span class="stat-lbl">Companies</span>
+          </div>
+          <div class="stat-cell">
+            <span class="stat-num" data-count="20">0</span>
+            <span class="stat-lbl">Core Skills</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ EXPERIENCE ════════════════════════════════════════ -->
+<section id="experience">
+  <div class="section-inner">
+    <div class="section-label">Career Timeline</div>
+    <h2 class="section-title">Work <em>Experience</em></h2>
+
+    <div class="exp-timeline">
+      <div class="exp-item">
+        <div class="exp-dot"></div>
+        <div class="exp-header">
+          <div>
+            <div class="exp-company">TradeTech — Dubai (Remote)</div>
+            <div class="exp-role">MT5 Administrator &amp; Developer</div>
+          </div>
+          <div class="exp-period current">2025 — Present</div>
+        </div>
+        <ul class="exp-bullets">
+          <li>Administered and configured MT5 including groups, symbols, contracts, spreads, swaps, and trading sessions.</li>
+          <li>Managed LP connectivity with Finalto, Mass Markets, and bridge systems including Tools for Brokers and custom-developed bridges.</li>
+          <li>Supported FIX API integration, execution flow monitoring, and price feed stability across multiple instruments.</li>
+          <li>Developed automation tools for pending order management and trading operations using C++ and Python.</li>
+          <li>Assisted in synthetic instruments, latency arbitrage, and HFT trading operations at institutional scale.</li>
+          <li>Generated exposure reports, handled trade investigations, and resolved execution and connectivity issues.</li>
+        </ul>
+      </div>
+
+      <div class="exp-item">
+        <div class="exp-dot"></div>
+        <div class="exp-header">
+          <div>
+            <div class="exp-company">Chemstock LLC — Dubai</div>
+            <div class="exp-role">Web Developer &amp; IT Administrator</div>
+          </div>
+          <div class="exp-period">2024 — 2025</div>
+        </div>
+        <ul class="exp-bullets">
+          <li>Managed WordPress and WooCommerce platforms with custom functionality and API integrations.</li>
+          <li>Maintained website performance, security, hosting, SSL, and server administration across all digital properties.</li>
+          <li>Handled IT support, cybersecurity, antivirus management, and remote troubleshooting across branches.</li>
+          <li>Provided system support, software installation, backups, and platform maintenance company-wide.</li>
+        </ul>
+      </div>
+
+      <div class="exp-item">
+        <div class="exp-dot"></div>
+        <div class="exp-header">
+          <div>
+            <div class="exp-company">eMexo Technologies — India</div>
+            <div class="exp-role">Web Developer</div>
+          </div>
+          <div class="exp-period">2021 — 2023</div>
+        </div>
+        <ul class="exp-bullets">
+          <li>Developed responsive websites and optimized WordPress platforms for performance and scalability.</li>
+          <li>Improved website performance, UI functionality, and CMS management across client projects.</li>
+          <li>Managed HubSpot CRM, workflow automation, and website integrations for business operations.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ SKILLS ═════════════════════════════════════════════ -->
+<section id="skills">
+  <div class="section-inner">
+    <div class="section-label">Expertise</div>
+    <h2 class="section-title">Skills &amp; <em>Capabilities</em></h2>
+
+    <div class="skills-grid">
+      <div class="skill-category">
+        <span class="skill-cat-icon">⚙️</span>
+        <div class="skill-cat-title">MT5 Administration</div>
+        <div class="skill-bar-item">
+          <div class="skill-bar-header"><span class="skill-bar-name">Group Configuration</span><span class="skill-bar-pct">95%</span></div>
+          <div class="skill-bar-track"><div class="skill-bar-fill" data-width="95"></div></div>
+        </div>
+        <div class="skill-bar-item">
+          <div class="skill-bar-header"><span class="skill-bar-name">Symbol &amp; Contract Setup</span><span class="skill-bar-pct">95%</span></div>
+          <div class="skill-bar-track"><div class="skill-bar-fill" data-width="95"></div></div>
+        </div>
+        <div class="skill-bar-item">
+          <div class="skill-bar-header"><span class="skill-bar-name">Spread &amp; Swap Mgmt</span><span class="skill-bar-pct">90%</span></div>
+          <div class="skill-bar-track"><div class="skill-bar-fill" data-width="90"></div></div>
+        </div>
+        <div class="skill-bar-item">
+          <div class="skill-bar-header"><span class="skill-bar-name">Trading Sessions</span><span class="skill-bar-pct">90%</span></div>
+          <div class="skill-bar-track"><div class="skill-bar-fill" data-width="90"></div></div>
+        </div>
+      </div>
+
+      <div class="skill-category">
+        <span class="skill-cat-icon">🔗</span>
+        <div class="skill-cat-title">Connectivity &amp; Integration</div>
+        <div class="skill-bar-item">
+          <div class="skill-bar-header"><span class="skill-bar-name">LP Integration</span><span class="skill-bar-pct">90%</span></div>
+          <div class="skill-bar-track"><div class="skill-bar-fill" data-width="90"></div></div>
+        </div>
+        <div class="skill-bar-item">
+          <div class="skill-bar-header"><span class="skill-bar-name">FIX API Integration</span><span class="skill-bar-pct">85%</span></div>
+          <div class="skill-bar-track"><div class="skill-bar-fill" data-width="85"></div></div>
+        </div>
+        <div class="skill-bar-item">
+          <div class="skill-bar-header"><span class="skill-bar-name">Bridge Monitoring</span><span class="skill-bar-pct">90%</span></div>
+          <div class="skill-bar-track"><div class="skill-bar-fill" data-width="90"></div></div>
+        </div>
+        <div class="skill-bar-item">
+          <div class="skill-bar-header"><span class="skill-bar-name">Price Feed Stability</span><span class="skill-bar-pct">88%</span></div>
+          <div class="skill-bar-track"><div class="skill-bar-fill" data-width="88"></div></div>
+        </div>
+      </div>
+
+      <div class="skill-category">
+        <span class="skill-cat-icon">📊</span>
+        <div class="skill-cat-title">Operations &amp; Risk</div>
+        <div class="skill-bar-item">
+          <div class="skill-bar-header"><span class="skill-bar-name">Exposure Reporting</span><span class="skill-bar-pct">88%</span></div>
+          <div class="skill-bar-track"><div class="skill-bar-fill" data-width="88"></div></div>
+        </div>
+        <div class="skill-bar-item">
+          <div class="skill-bar-header"><span class="skill-bar-name">Risk Monitoring</span><span class="skill-bar-pct">85%</span></div>
+          <div class="skill-bar-track"><div class="skill-bar-fill" data-width="85"></div></div>
+        </div>
+        <div class="skill-bar-item">
+          <div class="skill-bar-header"><span class="skill-bar-name">Trade Investigation</span><span class="skill-bar-pct">90%</span></div>
+          <div class="skill-bar-track"><div class="skill-bar-fill" data-width="90"></div></div>
+        </div>
+        <div class="skill-bar-item">
+          <div class="skill-bar-header"><span class="skill-bar-name">HFT Support</span><span class="skill-bar-pct">82%</span></div>
+          <div class="skill-bar-track"><div class="skill-bar-fill" data-width="82"></div></div>
+        </div>
+      </div>
+
+      <div class="skill-category">
+        <span class="skill-cat-icon">💻</span>
+        <div class="skill-cat-title">Development</div>
+        <div class="skill-bar-item">
+          <div class="skill-bar-header"><span class="skill-bar-name">C++ &amp; Python</span><span class="skill-bar-pct">80%</span></div>
+          <div class="skill-bar-track"><div class="skill-bar-fill" data-width="80"></div></div>
+        </div>
+        <div class="skill-bar-item">
+          <div class="skill-bar-header"><span class="skill-bar-name">WordPress / WooCommerce</span><span class="skill-bar-pct">88%</span></div>
+          <div class="skill-bar-track"><div class="skill-bar-fill" data-width="88"></div></div>
+        </div>
+        <div class="skill-bar-item">
+          <div class="skill-bar-header"><span class="skill-bar-name">Automation Tooling</span><span class="skill-bar-pct">82%</span></div>
+          <div class="skill-bar-track"><div class="skill-bar-fill" data-width="82"></div></div>
+        </div>
+        <div class="skill-bar-item">
+          <div class="skill-bar-header"><span class="skill-bar-name">HubSpot CRM</span><span class="skill-bar-pct">78%</span></div>
+          <div class="skill-bar-track"><div class="skill-bar-fill" data-width="78"></div></div>
+        </div>
+      </div>
+
+      <div class="skill-category">
+        <span class="skill-cat-icon">🖥️</span>
+        <div class="skill-cat-title">IT &amp; Infrastructure</div>
+        <div class="skill-bar-item">
+          <div class="skill-bar-header"><span class="skill-bar-name">Server Admin / SSL</span><span class="skill-bar-pct">85%</span></div>
+          <div class="skill-bar-track"><div class="skill-bar-fill" data-width="85"></div></div>
+        </div>
+        <div class="skill-bar-item">
+          <div class="skill-bar-header"><span class="skill-bar-name">Cybersecurity</span><span class="skill-bar-pct">78%</span></div>
+          <div class="skill-bar-track"><div class="skill-bar-fill" data-width="78"></div></div>
+        </div>
+        <div class="skill-bar-item">
+          <div class="skill-bar-header"><span class="skill-bar-name">IT Support</span><span class="skill-bar-pct">90%</span></div>
+          <div class="skill-bar-track"><div class="skill-bar-fill" data-width="90"></div></div>
+        </div>
+      </div>
+
+      <div class="skill-category">
+        <span class="skill-cat-icon">🌐</span>
+        <div class="skill-cat-title">Domain Knowledge</div>
+        <div class="skill-tags">
+          <span class="skill-tag">Latency Arbitrage</span>
+          <span class="skill-tag">Synthetic Instruments</span>
+          <span class="skill-tag">Execution Monitoring</span>
+          <span class="skill-tag">Finalto LP</span>
+          <span class="skill-tag">Mass Markets</span>
+          <span class="skill-tag">Tools for Brokers</span>
+          <span class="skill-tag">FX Markets</span>
+          <span class="skill-tag">CFD Instruments</span>
+          <span class="skill-tag">Order Management</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ CONTACT ═══════════════════════════════════════════ -->
+<section id="contact">
+  <div class="section-inner">
+    <div class="section-label">Get In Touch</div>
+    <h2 class="section-title">Let's <em>Connect</em></h2>
+
+    <div class="contact-grid">
+      <div class="contact-intro">
+        <p>
+          I'm currently based in Dubai and open to new opportunities in trading technology, MT5 administration,
+          and fintech infrastructure. Whether you're a broker, prop firm, or technology provider — let's talk.
+        </p>
+
+        <div class="contact-links">
+          <a href="tel:+971568102595" class="contact-link">
+            <div class="contact-link-icon">📞</div>
+            <div>
+              <span class="contact-link-label">Phone</span>
+              <span class="contact-link-value">+971 568 102 595</span>
+            </div>
+          </a>
+          <a href="mailto:ajay171098@gmail.com" class="contact-link">
+            <div class="contact-link-icon">✉️</div>
+            <div>
+              <span class="contact-link-label">Email</span>
+              <span class="contact-link-value">ajay171098@gmail.com</span>
+            </div>
+          </a>
+          <a href="https://linkedin.com/in/ajay-k-a2z" target="_blank" class="contact-link">
+            <div class="contact-link-icon">in</div>
+            <div>
+              <span class="contact-link-label">LinkedIn</span>
+              <span class="contact-link-value">linkedin.com/in/ajay-k-a2z</span>
+            </div>
+          </a>
+          <a href="https://aj-creationz.github.io" target="_blank" class="contact-link">
+            <div class="contact-link-icon">🔗</div>
+            <div>
+              <span class="contact-link-label">Portfolio / GitHub</span>
+              <span class="contact-link-value">aj-creationz.github.io</span>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <div>
+        <form class="contact-form" id="contactForm" onsubmit="handleSubmit(event)">
+          <div class="form-group">
+            <label class="form-label" for="name">Your Name</label>
+            <input class="form-input" type="text" id="name" placeholder="John Smith" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="email">Email Address</label>
+            <input class="form-input" type="email" id="email" placeholder="john@company.com" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="subject">Subject</label>
+            <input class="form-input" type="text" id="subject" placeholder="Job Opportunity / Collaboration">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="message">Message</label>
+            <textarea class="form-textarea" id="message" placeholder="Tell me about the opportunity..." required></textarea>
+          </div>
+          <button type="submit" class="form-submit" id="submitBtn">Send Message</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FOOTER ════════════════════════════════════════════ -->
+<footer>
+  <div class="footer-left">Ajay K</div>
+  <div class="footer-center">
+    © 2025 Ajay K · MT5 Admin &amp; Developer · Dubai, UAE
+  </div>
+  <div class="footer-right">
+    <a href="https://linkedin.com/in/ajay-k-a2z" target="_blank" class="footer-social" title="LinkedIn">in</a>
+    <a href="https://aj-creationz.github.io" target="_blank" class="footer-social" title="GitHub">⌨</a>
+    <a href="mailto:ajay171098@gmail.com" class="footer-social" title="Email">✉</a>
+  </div>
+</footer>
+
+<script>
+// ── Custom Cursor ──────────────────────────────────────────
+const dot  = document.getElementById('cursorDot');
+const ring = document.getElementById('cursorRing');
+let mx = 0, my = 0, rx = 0, ry = 0;
+
+document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+
+function animCursor() {
+  dot.style.left  = mx + 'px';
+  dot.style.top   = my + 'px';
+  rx += (mx - rx) * 0.12;
+  ry += (my - ry) * 0.12;
+  ring.style.left = rx + 'px';
+  ring.style.top  = ry + 'px';
+  requestAnimationFrame(animCursor);
+}
+animCursor();
+
+document.querySelectorAll('a, button, .contact-link, .skill-category, .exp-item').forEach(el => {
+  el.addEventListener('mouseenter', () => ring.classList.add('hover'));
+  el.addEventListener('mouseleave', () => ring.classList.remove('hover'));
+});
+
+// ── Canvas Background ──────────────────────────────────────
+const canvas = document.getElementById('bg-canvas');
+const ctx = canvas.getContext('2d');
+let W, H, particles = [], lines = [];
+
+function resize() {
+  W = canvas.width  = window.innerWidth;
+  H = canvas.height = window.innerHeight;
+}
+resize();
+window.addEventListener('resize', () => { resize(); });
+
+class Particle {
+  constructor() { this.reset(); }
+  reset() {
+    this.x = Math.random() * W;
+    this.y = Math.random() * H;
+    this.vx = (Math.random() - 0.5) * 0.3;
+    this.vy = (Math.random() - 0.5) * 0.3;
+    this.size = Math.random() * 1.5 + 0.5;
+    this.alpha = Math.random() * 0.4 + 0.1;
+    this.gold = Math.random() > 0.6;
+  }
+  update() {
+    this.x += this.vx; this.y += this.vy;
+    if (this.x < 0 || this.x > W || this.y < 0 || this.y > H) this.reset();
+  }
+  draw() {
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+    ctx.fillStyle = this.gold
+      ? `rgba(200,164,90,${this.alpha})`
+      : `rgba(38,208,206,${this.alpha * 0.5})`;
+    ctx.fill();
+  }
+}
+
+for (let i = 0; i < 80; i++) particles.push(new Particle());
+
+function drawBG() {
+  ctx.clearRect(0, 0, W, H);
+
+  // Grid lines
+  ctx.strokeStyle = 'rgba(200,164,90,0.03)';
+  ctx.lineWidth = 1;
+  const gsize = 80;
+  for (let x = 0; x < W; x += gsize) {
+    ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke();
+  }
+  for (let y = 0; y < H; y += gsize) {
+    ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke();
+  }
+
+  // Particle connections
+  particles.forEach((p, i) => {
+    p.update(); p.draw();
+    for (let j = i + 1; j < particles.length; j++) {
+      const q = particles[j];
+      const d = Math.hypot(p.x - q.x, p.y - q.y);
+      if (d < 120) {
+        ctx.beginPath();
+        ctx.moveTo(p.x, p.y);
+        ctx.lineTo(q.x, q.y);
+        ctx.strokeStyle = `rgba(200,164,90,${0.06 * (1 - d / 120)})`;
+        ctx.lineWidth = 0.5;
+        ctx.stroke();
+      }
+    }
+  });
+
+  requestAnimationFrame(drawBG);
+}
+drawBG();
+
+// ── Nav scroll ─────────────────────────────────────────────
+const nav = document.getElementById('mainNav');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 50);
+});
+
+// ── Intersection observer for animations ───────────────────
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      // Trigger skill bars
+      entry.target.querySelectorAll('.skill-bar-fill').forEach(bar => {
+        bar.style.width = bar.dataset.width + '%';
+      });
+      // Trigger counters
+      entry.target.querySelectorAll('[data-count]').forEach(el => {
+        animCount(el, parseInt(el.dataset.count));
+      });
+    }
+  });
+}, { threshold: 0.15 });
+
+document.querySelectorAll('.exp-item, .skill-category').forEach(el => observer.observe(el));
+document.querySelectorAll('.about-stats').forEach(el => observer.observe(el));
+
+function animCount(el, target) {
+  let current = 0;
+  const step = target / 40;
+  const timer = setInterval(() => {
+    current = Math.min(current + step, target);
+    el.textContent = Math.round(current) + (target >= 20 ? '+' : '');
+    if (current >= target) clearInterval(timer);
+  }, 30);
+}
+
+// ── Contact form ────────────────────────────────────────────
+function handleSubmit(e) {
+  e.preventDefault();
+  const btn = document.getElementById('submitBtn');
+  const name    = document.getElementById('name').value;
+  const email   = document.getElementById('email').value;
+  const subject = document.getElementById('subject').value;
+  const message = document.getElementById('message').value;
+
+  // Open mail client
+  const mailto = `mailto:ajay171098@gmail.com?subject=${encodeURIComponent(subject || 'Portfolio Enquiry')}&body=${encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\n${message}`)}`;
+  window.location.href = mailto;
+
+  btn.textContent = 'Message Sent ✓';
+  btn.style.background = 'var(--cyan)';
+  setTimeout(() => {
+    btn.textContent = 'Send Message';
+    btn.style.background = '';
+  }, 3000);
+}
+
+// ── Smooth page load ────────────────────────────────────────
+document.body.style.opacity = '0';
+window.addEventListener('load', () => {
+  document.body.style.transition = 'opacity 0.4s';
+  document.body.style.opacity = '1';
+});
+</script>
+</body>
+</html>
