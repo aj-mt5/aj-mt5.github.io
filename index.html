@@ -25,11 +25,8 @@
     --gradient-gold: linear-gradient(135deg, #c8a45a, #e2c47e, #a87c3a);
     --gradient-hero: linear-gradient(160deg, #080a0f 0%, #0d1220 50%, #080a0f 100%);
   }
-
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
   html { scroll-behavior: smooth; }
-
   body {
     background: var(--bg-primary);
     color: var(--text-primary);
@@ -38,7 +35,6 @@
     overflow-x: hidden;
     cursor: none;
   }
-
   /* ── Custom Cursor ─────────────────────────────────── */
   .cursor-dot {
     width: 6px; height: 6px;
@@ -60,13 +56,11 @@
     opacity: 0.6;
   }
   .cursor-ring.hover { width: 50px; height: 50px; opacity: 0.3; }
-
   /* ── Canvas BG ─────────────────────────────────────── */
   #bg-canvas {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
     z-index: 0; pointer-events: none; opacity: 0.5;
   }
-
   /* ── Nav ───────────────────────────────────────────── */
   nav {
     position: fixed; top: 0; left: 0; right: 0; z-index: 100;
@@ -77,7 +71,6 @@
     transition: padding 0.3s;
   }
   nav.scrolled { padding: 16px 60px; background: rgba(8,10,15,0.97); border-bottom: 1px solid var(--border); }
-
   .nav-logo {
     font-family: 'Cormorant Garamond', serif;
     font-size: 22px;
@@ -87,7 +80,6 @@
     text-decoration: none;
   }
   .nav-logo span { color: var(--text-secondary); font-weight: 300; }
-
   .nav-links { display: flex; gap: 40px; list-style: none; }
   .nav-links a {
     font-family: 'DM Mono', monospace;
@@ -107,7 +99,6 @@
   }
   .nav-links a:hover { color: var(--gold-light); }
   .nav-links a:hover::after { width: 100%; }
-
   .nav-cta {
     padding: 9px 24px;
     border: 1px solid var(--gold);
@@ -121,7 +112,6 @@
   }
   .nav-cta:hover { background: var(--gold) !important; color: var(--bg-primary) !important; }
   .nav-cta::after { display: none !important; }
-
   /* ── Hero ──────────────────────────────────────────── */
   #hero {
     position: relative; z-index: 1;
@@ -130,7 +120,6 @@
     padding: 0 60px;
     overflow: hidden;
   }
-
   .hero-eyebrow {
     font-family: 'DM Mono', monospace;
     font-size: 11px;
@@ -147,7 +136,6 @@
     display: inline-block; width: 40px; height: 1px;
     background: var(--cyan);
   }
-
   .hero-name {
     font-family: 'Cormorant Garamond', serif;
     font-size: clamp(72px, 9vw, 140px);
@@ -166,7 +154,6 @@
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
-
   .hero-title {
     font-family: 'DM Mono', monospace;
     font-size: clamp(13px, 1.5vw, 17px);
@@ -178,7 +165,6 @@
     opacity: 0;
     animation: fadeUp 0.8s 0.7s forwards;
   }
-
   .hero-desc {
     max-width: 560px;
     font-size: 17px;
@@ -189,13 +175,11 @@
     margin-bottom: 52px;
     font-weight: 300;
   }
-
   .hero-actions {
     display: flex; gap: 20px; align-items: center;
     opacity: 0;
     animation: fadeUp 0.8s 1.1s forwards;
   }
-
   .btn-primary {
     padding: 16px 42px;
     background: var(--gold);
@@ -210,7 +194,6 @@
     clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 12px 100%, 0 calc(100% - 12px));
   }
   .btn-primary:hover { background: var(--gold-light); transform: translateY(-2px); box-shadow: 0 12px 40px rgba(200,164,90,0.35); }
-
   .btn-secondary {
     padding: 16px 42px;
     border: 1px solid var(--border);
@@ -223,7 +206,6 @@
     transition: all 0.25s;
   }
   .btn-secondary:hover { border-color: var(--gold); color: var(--gold); }
-
   .hero-meta {
     position: absolute; bottom: 50px; right: 60px;
     display: flex; flex-direction: column; align-items: flex-end; gap: 8px;
@@ -238,7 +220,6 @@
     color: var(--text-muted);
   }
   .hero-meta-item strong { color: var(--gold); margin-right: 8px; }
-
   .scroll-indicator {
     position: absolute; bottom: 50px; left: 60px;
     display: flex; align-items: center; gap: 14px;
@@ -258,7 +239,6 @@
     color: var(--text-muted);
     writing-mode: vertical-rl;
   }
-
   /* ── Ticker ────────────────────────────────────────── */
   .ticker-strip {
     position: relative; z-index: 1;
@@ -285,16 +265,13 @@
   .ticker-item .sym { color: var(--gold); font-weight: 500; }
   .ticker-item .up { color: var(--cyan); }
   .ticker-item .down { color: #e05555; }
-
   /* ── Section Layout ────────────────────────────────── */
   section { position: relative; z-index: 1; }
-
   .section-inner {
     max-width: 1280px;
     margin: 0 auto;
     padding: 120px 60px;
   }
-
   .section-label {
     font-family: 'DM Mono', monospace;
     font-size: 10px;
@@ -310,7 +287,6 @@
     background: var(--border);
     max-width: 60px;
   }
-
   .section-title {
     font-family: 'Cormorant Garamond', serif;
     font-size: clamp(38px, 4.5vw, 64px);
@@ -320,17 +296,14 @@
     margin-bottom: 60px;
   }
   .section-title em { font-style: italic; color: var(--gold); }
-
   /* ── About ─────────────────────────────────────────── */
   #about { background: var(--bg-secondary); }
-
   .about-grid {
     display: grid;
     grid-template-columns: 1fr 1.4fr;
     gap: 100px;
     align-items: start;
   }
-
   .about-photo-wrap {
     position: relative;
   }
@@ -338,7 +311,6 @@
     position: relative;
     width: 100%;
     padding-bottom: 120%;
-    overflow: hidden;
   }
   .about-photo-frame::before {
     content: '';
@@ -389,7 +361,6 @@
     color: var(--text-muted);
     margin-top: 12px;
   }
-
   .about-badges {
     display: flex; flex-wrap: wrap; gap: 8px;
     margin-top: 24px;
@@ -406,7 +377,6 @@
   }
   .badge:hover { border-color: var(--gold); color: var(--gold); }
   .badge.gold { border-color: var(--gold); color: var(--gold); background: var(--gold-dim); }
-
   .about-content p {
     font-size: 17px;
     line-height: 1.85;
@@ -415,7 +385,6 @@
     font-weight: 300;
   }
   .about-content p strong { color: var(--text-primary); font-weight: 500; }
-
   .about-stats {
     display: grid; grid-template-columns: repeat(3, 1fr);
     gap: 1px;
@@ -445,10 +414,8 @@
     display: block;
     margin-top: 8px;
   }
-
   /* ── Experience ────────────────────────────────────── */
   #experience { background: var(--bg-primary); }
-
   .exp-timeline {
     position: relative;
     padding-left: 40px;
@@ -459,7 +426,6 @@
     width: 1px;
     background: linear-gradient(to bottom, var(--gold), var(--border), transparent);
   }
-
   .exp-item {
     position: relative;
     margin-bottom: 70px;
@@ -468,7 +434,6 @@
     transition: all 0.6s ease;
   }
   .exp-item.visible { opacity: 1; transform: translateY(0); }
-
   .exp-dot {
     position: absolute; left: -46px; top: 8px;
     width: 12px; height: 12px;
@@ -478,7 +443,6 @@
     transition: background 0.2s;
   }
   .exp-item:hover .exp-dot { background: var(--gold); }
-
   .exp-header {
     display: flex; align-items: flex-start; justify-content: space-between;
     margin-bottom: 8px;
@@ -509,7 +473,6 @@
     white-space: nowrap;
   }
   .exp-period.current { border-color: var(--cyan); color: var(--cyan); }
-
   .exp-bullets {
     list-style: none;
     margin-top: 20px;
@@ -531,16 +494,13 @@
     margin-top: 2px;
     flex-shrink: 0;
   }
-
   /* ── Skills ────────────────────────────────────────── */
   #skills { background: var(--bg-secondary); }
-
   .skills-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 24px;
   }
-
   .skill-category {
     background: var(--bg-card);
     border: 1px solid var(--border-subtle);
@@ -564,7 +524,6 @@
   }
   .skill-category:hover::before { transform: scaleX(1); }
   .skill-category:hover { border-color: var(--border); }
-
   .skill-cat-icon {
     font-size: 28px; margin-bottom: 16px; display: block;
   }
@@ -576,7 +535,6 @@
     margin-bottom: 20px;
     letter-spacing: 0.02em;
   }
-
   .skill-bar-item { margin-bottom: 14px; }
   .skill-bar-header {
     display: flex; justify-content: space-between; align-items: center;
@@ -606,7 +564,6 @@
     width: 0%;
     transition: width 1.2s cubic-bezier(0.22, 1, 0.36, 1);
   }
-
   .skill-tags {
     display: flex; flex-wrap: wrap; gap: 6px;
     margin-top: 16px;
@@ -621,17 +578,14 @@
     text-transform: uppercase;
     color: var(--gold);
   }
-
   /* ── Contact ───────────────────────────────────────── */
   #contact { background: var(--bg-primary); }
-
   .contact-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 80px;
     align-items: start;
   }
-
   .contact-intro p {
     font-size: 17px;
     line-height: 1.85;
@@ -639,7 +593,6 @@
     font-weight: 300;
     margin-bottom: 40px;
   }
-
   .contact-links { display: flex; flex-direction: column; gap: 16px; }
   .contact-link {
     display: flex; align-items: center; gap: 20px;
@@ -673,9 +626,7 @@
     color: var(--text-primary);
     font-weight: 400;
   }
-
   .contact-form { display: flex; flex-direction: column; gap: 20px; }
-
   .form-group { display: flex; flex-direction: column; gap: 8px; }
   .form-label {
     font-family: 'DM Mono', monospace;
@@ -700,7 +651,6 @@
   .form-input:focus, .form-textarea:focus { border-color: var(--gold); }
   .form-input::placeholder, .form-textarea::placeholder { color: var(--text-muted); }
   .form-textarea { min-height: 130px; }
-
   .form-submit {
     padding: 16px 42px;
     background: var(--gold);
@@ -717,7 +667,6 @@
     clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
   }
   .form-submit:hover { background: var(--gold-light); transform: translateY(-2px); box-shadow: 0 12px 40px rgba(200,164,90,0.3); }
-
   /* ── Footer ────────────────────────────────────────── */
   footer {
     position: relative; z-index: 1;
@@ -753,7 +702,6 @@
     transition: all 0.2s;
   }
   .footer-social:hover { border-color: var(--gold); color: var(--gold); }
-
   /* ── Animations ────────────────────────────────────── */
   @keyframes fadeUp {
     from { opacity: 0; transform: translateY(20px); }
@@ -771,7 +719,6 @@
     0%   { background-position: -200% center; }
     100% { background-position: 200% center; }
   }
-
   /* ── Responsive ────────────────────────────────────── */
   @media (max-width: 1024px) {
     nav { padding: 20px 32px; }
@@ -799,11 +746,9 @@
 </style>
 </head>
 <body>
-
 <div class="cursor-dot" id="cursorDot"></div>
 <div class="cursor-ring" id="cursorRing"></div>
 <canvas id="bg-canvas"></canvas>
-
 <!-- ══ NAV ══════════════════════════════════════════════ -->
 <nav id="mainNav">
   <a href="#" class="nav-logo">AK <span>/ Portfolio</span></a>
@@ -815,13 +760,12 @@
     <li><a href="mailto:ajay171098@gmail.com" class="nav-cta">Hire Me</a></li>
   </ul>
 </nav>
-
 <!-- ══ HERO ═════════════════════════════════════════════ -->
 <section id="hero">
   <div class="hero-eyebrow">MT5 Administrator &amp; Developer</div>
   <h1 class="hero-name">
     <span class="first">Ajay</span>
-    <span class="last">K</span>
+    <span class="last">Kannan</span>
   </h1>
   <div class="hero-title">Trading Technology Specialist · Dubai, UAE</div>
   <p class="hero-desc">
@@ -833,19 +777,16 @@
     <a href="#experience" class="btn-primary">View Experience</a>
     <a href="#contact" class="btn-secondary">Let's Connect</a>
   </div>
-
   <div class="scroll-indicator">
     <div class="scroll-line"></div>
     <div class="scroll-text">Scroll</div>
   </div>
-
   <div class="hero-meta">
     <div class="hero-meta-item"><strong>📍</strong>Dubai, UAE</div>
     <div class="hero-meta-item"><strong>🎓</strong>BE — Computer Science</div>
     <div class="hero-meta-item"><strong>⚡</strong>Available for opportunities</div>
   </div>
 </section>
-
 <!-- ══ TICKER ════════════════════════════════════════════ -->
 <div class="ticker-strip" aria-hidden="true">
   <div class="ticker-track" id="tickerTrack">
@@ -871,7 +812,6 @@
     <div class="ticker-item"><span class="sym">XAUUSDT</span> <span class="down">4120.15 ▼</span></div>
   </div>
 </div>
-
 <!-- ══ ABOUT ═════════════════════════════════════════════ -->
 <section id="about">
   <div class="section-inner">
@@ -892,7 +832,6 @@
           <span class="badge">Tamil · English · Hindi</span>
         </div>
       </div>
-
       <div class="about-content">
         <div class="section-label">About Me</div>
         <h2 class="section-title">Trading Tech <em>Specialist</em></h2>
@@ -903,14 +842,13 @@
         </p>
         <p>
           My current role at TradeTech involves administering MT5 environments end-to-end — from symbol configuration
-          and spread management to LP connectivity with <strong>Finalto</strong> and <strong>Mass Markets</strong>.
+          and spread management to LP connectivity with <strong>Finalto</strong>, <strong>Lmax</strong>, <strong>Mass Markets</strong> and <strong>Binance</strong>.
           I also develop automation tools that streamline trading operations and support HFT execution pipelines.
         </p>
         <p>
           A BE graduate in Computer Science, I bring both technical depth and domain expertise in
           broker-side operations, risk monitoring, and execution infrastructure.
         </p>
-
         <div class="about-stats">
           <div class="stat-cell">
             <span class="stat-num" data-count="5">0</span>
@@ -929,13 +867,11 @@
     </div>
   </div>
 </section>
-
 <!-- ══ EXPERIENCE ════════════════════════════════════════ -->
 <section id="experience">
   <div class="section-inner">
     <div class="section-label">Career Timeline</div>
     <h2 class="section-title">Work <em>Experience</em></h2>
-
     <div class="exp-timeline">
       <div class="exp-item">
         <div class="exp-dot"></div>
@@ -955,12 +891,12 @@
           <li>Performed trade investigations, exposure analysis, execution monitoring, latency optimization, and production troubleshooting to maximize platform stability, data integrity, and trading performance.</li>
         </ul>
       </div>
-
       <div class="exp-item">
         <div class="exp-dot"></div>
         <div class="exp-header">
           <div>
-            <div class="exp-company">Chemstock LLC — Dubai</div>Developer &amp; Systems Administrator</div>
+            <div class="exp-company">Chemstock LLC — Dubai</div>
+            <div class="exp-role">Developer &amp; Systems Administrator</div>
           </div>
           <div class="exp-period">2024 — 2025</div>
         </div>
@@ -971,13 +907,12 @@
           <li>Implemented automation solutions, monitored system health, and resolved infrastructure issues to maximize uptime, operational efficiency, and data integrity.</li>
         </ul>
       </div>
-
       <div class="exp-item">
         <div class="exp-dot"></div>
         <div class="exp-header">
           <div>
             <div class="exp-company">eMexo Technologies — India</div>
-            <div class="exp-role">Web Developer</div>
+            <div class="exp-role">Software Engineer</div>
           </div>
           <div class="exp-period">2021 — 2023</div>
         </div>
@@ -991,13 +926,11 @@
     </div>
   </div>
 </section>
-
 <!-- ══ SKILLS ═════════════════════════════════════════════ -->
 <section id="skills">
   <div class="section-inner">
     <div class="section-label">Expertise</div>
     <h2 class="section-title">Skills &amp; <em>Capabilities</em></h2>
-
     <div class="skills-grid">
       <div class="skill-category">
         <span class="skill-cat-icon">⚙️</span>
@@ -1019,7 +952,6 @@
           <div class="skill-bar-track"><div class="skill-bar-fill" data-width="90"></div></div>
         </div>
       </div>
-
       <div class="skill-category">
         <span class="skill-cat-icon">🔗</span>
         <div class="skill-cat-title">Connectivity &amp; Integration</div>
@@ -1040,7 +972,6 @@
           <div class="skill-bar-track"><div class="skill-bar-fill" data-width="88"></div></div>
         </div>
       </div>
-
       <div class="skill-category">
         <span class="skill-cat-icon">📊</span>
         <div class="skill-cat-title">Operations &amp; Risk</div>
@@ -1061,7 +992,6 @@
           <div class="skill-bar-track"><div class="skill-bar-fill" data-width="82"></div></div>
         </div>
       </div>
-
       <div class="skill-category">
         <span class="skill-cat-icon">💻</span>
         <div class="skill-cat-title">Development</div>
@@ -1082,7 +1012,6 @@
           <div class="skill-bar-track"><div class="skill-bar-fill" data-width="78"></div></div>
         </div>
       </div>
-
       <div class="skill-category">
         <span class="skill-cat-icon">🖥️</span>
         <div class="skill-cat-title">IT &amp; Infrastructure</div>
@@ -1103,7 +1032,6 @@
           <div class="skill-bar-track"><div class="skill-bar-fill" data-width="90"></div></div>
         </div>
       </div>
-
       <div class="skill-category">
         <span class="skill-cat-icon">🌐</span>
         <div class="skill-cat-title">Domain Knowledge</div>
@@ -1122,20 +1050,17 @@
     </div>
   </div>
 </section>
-
 <!-- ══ CONTACT ═══════════════════════════════════════════ -->
 <section id="contact">
   <div class="section-inner">
     <div class="section-label">Get In Touch</div>
     <h2 class="section-title">Let's <em>Connect</em></h2>
-
     <div class="contact-grid">
       <div class="contact-intro">
         <p>
           I'm currently based in Dubai and open to new opportunities in trading technology, MT5 administration,
           and fintech infrastructure. Whether you're a broker, prop firm, or technology provider — let's talk.
         </p>
-
         <div class="contact-links">
           <a href="tel:+971525302056" class="contact-link">
             <div class="contact-link-icon">📞</div>
@@ -1167,7 +1092,6 @@
           </a>
         </div>
       </div>
-
       <div>
         <form class="contact-form" id="contactForm" onsubmit="handleSubmit(event)">
           <div class="form-group">
@@ -1192,7 +1116,6 @@
     </div>
   </div>
 </section>
-
 <!-- ══ FOOTER ════════════════════════════════════════════ -->
 <footer>
   <div class="footer-left">Ajay K</div>
@@ -1205,15 +1128,12 @@
     <a href="mailto:ajay171098@gmail.com" class="footer-social" title="Email">✉</a>
   </div>
 </footer>
-
 <script>
 // ── Custom Cursor ──────────────────────────────────────────
 const dot  = document.getElementById('cursorDot');
 const ring = document.getElementById('cursorRing');
 let mx = 0, my = 0, rx = 0, ry = 0;
-
 document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
-
 function animCursor() {
   dot.style.left  = mx + 'px';
   dot.style.top   = my + 'px';
@@ -1224,24 +1144,20 @@ function animCursor() {
   requestAnimationFrame(animCursor);
 }
 animCursor();
-
 document.querySelectorAll('a, button, .contact-link, .skill-category, .exp-item').forEach(el => {
   el.addEventListener('mouseenter', () => ring.classList.add('hover'));
   el.addEventListener('mouseleave', () => ring.classList.remove('hover'));
 });
-
 // ── Canvas Background ──────────────────────────────────────
 const canvas = document.getElementById('bg-canvas');
 const ctx = canvas.getContext('2d');
 let W, H, particles = [], lines = [];
-
 function resize() {
   W = canvas.width  = window.innerWidth;
   H = canvas.height = window.innerHeight;
 }
 resize();
 window.addEventListener('resize', () => { resize(); });
-
 class Particle {
   constructor() { this.reset(); }
   reset() {
@@ -1266,12 +1182,9 @@ class Particle {
     ctx.fill();
   }
 }
-
 for (let i = 0; i < 80; i++) particles.push(new Particle());
-
 function drawBG() {
   ctx.clearRect(0, 0, W, H);
-
   // Grid lines
   ctx.strokeStyle = 'rgba(200,164,90,0.03)';
   ctx.lineWidth = 1;
@@ -1282,7 +1195,6 @@ function drawBG() {
   for (let y = 0; y < H; y += gsize) {
     ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke();
   }
-
   // Particle connections
   particles.forEach((p, i) => {
     p.update(); p.draw();
@@ -1299,17 +1211,14 @@ function drawBG() {
       }
     }
   });
-
   requestAnimationFrame(drawBG);
 }
 drawBG();
-
 // ── Nav scroll ─────────────────────────────────────────────
 const nav = document.getElementById('mainNav');
 window.addEventListener('scroll', () => {
   nav.classList.toggle('scrolled', window.scrollY > 50);
 });
-
 // ── Intersection observer for animations ───────────────────
 const observer = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
@@ -1326,10 +1235,8 @@ const observer = new IntersectionObserver((entries) => {
     }
   });
 }, { threshold: 0.15 });
-
 document.querySelectorAll('.exp-item, .skill-category').forEach(el => observer.observe(el));
 document.querySelectorAll('.about-stats').forEach(el => observer.observe(el));
-
 function animCount(el, target) {
   let current = 0;
   const step = target / 40;
@@ -1339,7 +1246,6 @@ function animCount(el, target) {
     if (current >= target) clearInterval(timer);
   }, 30);
 }
-
 // ── Contact form ────────────────────────────────────────────
 function handleSubmit(e) {
   e.preventDefault();
@@ -1348,11 +1254,9 @@ function handleSubmit(e) {
   const email   = document.getElementById('email').value;
   const subject = document.getElementById('subject').value;
   const message = document.getElementById('message').value;
-
   // Open mail client
   const mailto = `mailto:ajay171098@gmail.com?subject=${encodeURIComponent(subject || 'Portfolio Enquiry')}&body=${encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\n${message}`)}`;
   window.location.href = mailto;
-
   btn.textContent = 'Message Sent ✓';
   btn.style.background = 'var(--cyan)';
   setTimeout(() => {
@@ -1360,7 +1264,6 @@ function handleSubmit(e) {
     btn.style.background = '';
   }, 3000);
 }
-
 // ── Smooth page load ────────────────────────────────────────
 document.body.style.opacity = '0';
 window.addEventListener('load', () => {
